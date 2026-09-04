@@ -28,6 +28,19 @@ format:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r package_install, include=FALSE}
+```
+
+```{r packages}
+require(tidyverse)
+require(rmarkdown)
+require(yaml)
+```
+```{r loading_data}
+library(readr)
+movies <- read_tsv("movies3.tsv")
+```
+
 # Introduction
 
 This assignment is to be completed in groups of 4-5. Further, all students in your group need to be assigned to the same R tutorial group (Friday's tutorial). You can sign yourself up for a group on Canvas. Please do so \textbf{before the start of your first R tutorial on Friday September 4th.} You can use the Discussion Board in Canvas if you do not have a group yet or if your group is incomplete.
