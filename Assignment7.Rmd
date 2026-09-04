@@ -38,7 +38,7 @@ require(yaml)
 ```
 ```{r loading_data}
 library(readr)
-movies <- read_tsv("movies3.tsv")
+movies3 <- read_tsv("movies3.tsv")
 ```
 
 # Introduction
@@ -76,12 +76,13 @@ Each week consists of 1, 2, or 3 subquestions. The total amount of points you ca
 1.  Find the dataset “movies3.tsv” on Canvas. Describe your data set: How many observations does it have. How many variables are there? How many subjects? What consists of a subject? \textbf{[4 points]}
 
 ```{r}
-#WRITE YOUR CODE HERE
+ncol(movies3)
+nrow(movies3)
 ```
 
 **Your Answer:**
 
-Write your response here.
+There is 707 observations and subjects, and 19 variables. Each movie is a subject. 
 
 2. Which of the following types of variables are present in your data set? (i) nominal; (ii) ordinal; (iii); interval; (iv) ratio. If present, name one example of such a variable present in your data set.  \textbf{[4 points]} 
 
