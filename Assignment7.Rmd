@@ -28,19 +28,6 @@ format:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r package_install, include=FALSE}
-```
-
-```{r packages}
-require(tidyverse)
-require(rmarkdown)
-require(yaml)
-```
-```{r loading_data}
-library(readr)
-movies3 <- read_tsv("movies3.tsv")
-```
-
 # Introduction
 
 This assignment is to be completed in groups of 4-5. Further, all students in your group need to be assigned to the same R tutorial group (Friday's tutorial). You can sign yourself up for a group on Canvas. Please do so \textbf{before the start of your first R tutorial on Friday September 4th.} You can use the Discussion Board in Canvas if you do not have a group yet or if your group is incomplete.
@@ -76,18 +63,18 @@ Each week consists of 1, 2, or 3 subquestions. The total amount of points you ca
 1.  Find the dataset “movies3.tsv” on Canvas. Describe your data set: How many observations does it have. How many variables are there? How many subjects? What consists of a subject? \textbf{[4 points]}
 
 ```{r}
-ncol(movies3)
-nrow(movies3)
+movies <- read.delim("movies3.tsv")
+dim(movies)
 ```
 
 **Your Answer:**
 
-There is 707 observations and subjects, and 19 variables. Each movie is a subject. 
+Write your response here.
 
 2. Which of the following types of variables are present in your data set? (i) nominal; (ii) ordinal; (iii); interval; (iv) ratio. If present, name one example of such a variable present in your data set.  \textbf{[4 points]} 
 
 ```{r}
-#WRITE YOUR CODE HERE
+str(movies)
 ```
 
 **Your Answer:**
@@ -109,8 +96,11 @@ For each step, you should provide first all the code you used to answer the ques
 *Step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+movies$PR <- movies$revenue / movies$budget
+mean(movies$PR, na.rm = TRUE)
+median(movies$PR, na.rm = TRUE)
+max(movies$PR, na.rm = TRUE)
+min(movies$PR, na.rm = TRUE)
 ```
 
 **Your Answer:**
@@ -121,7 +111,7 @@ Write your formulated response here.
 
 ```{r}
 
-#WRITE YOUR CODE HERE
+movies[is.infinite(movies$PR), c("title", "budget", "revenue", "PR")]
 
 ```
 
@@ -133,7 +123,7 @@ Write your formulated response here.
 
 ```{r}
 
-#WRITE YOUR CODE HERE
+movies[is.na(movies$PR), c("title", "budget", "revenue", "PR")]
 
 ```
 
@@ -145,7 +135,11 @@ Write your formulated response here.
 
 ```{r}
 
-#WRITE YOUR CODE HERE
+movies$PR[is.infinite(movies$PR)] <- NA
+mean(movies$PR, na.rm = TRUE)
+median(movies$PR, na.rm = TRUE)
+max(movies$PR, na.rm = TRUE)
+min(movies$PR, na.rm = TRUE)
 
 ```
 
@@ -157,7 +151,7 @@ Write your formulated response here.
 
 ```{r}
 
-#WRITE YOUR CODE HERE
+mean(movies$PR >= 1, na.rm = TRUE)
 
 ```
 
@@ -169,7 +163,13 @@ Write your formulated response here.
 
 ```{r}
 
-#WRITE YOUR CODE HERE
+boxplot(movies$PR,
+        main = "Profitability Ratio of Movies",
+        xlab = "Movies",
+        ylab = "Profitability Ratio (Revenue / Budget)")
+quantile(movies$PR,
+          probs = c(0.25, 0.50, 0.75, 1),
+          na.rm = TRUE)
 
 ```
 
