@@ -180,7 +180,7 @@ Write your formulated response here.
 # Week 2 
 1 Is your dataset movies3.tsv the full population, or is it a sample of a larger population? If the latter, how would you describe the full population? \textbf{[4 points]} 
 
-**Your Answer**
+The dataset movies3.tsv is a sample of a larger population because the "Index" variable goes to 4798 whilst the number of observations is only at 707. Therefore we can conclude that there are more than 4000 data points not present in the movies3.tsv samples. The full population likely includes movies from a database such as IMDB.
 
 Write your formulated response here.
 
