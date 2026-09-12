@@ -69,7 +69,7 @@ dim(movies)
 
 **Your Answer:**
 
-Write your response here.
+Based on the (dim) output, the dataset has 707 observations and 19 variables. Each row represents a specific movie, meaning that there are 707 subjects in total. A subject in this specific context is simply the movie itself. 
 
 2. Which of the following types of variables are present in your data set? (i) nominal; (ii) ordinal; (iii); interval; (iv) ratio. If present, name one example of such a variable present in your data set.  \textbf{[4 points]} 
 
@@ -79,7 +79,10 @@ str(movies)
 
 **Your Answer:**
 
-rite your response here.
+(i) Genre or original_language, since these represent categories without any numerical order.
+(ii) There are no strictly ordinal variables present in this dataset. 
+(iii) Release_year, because the difference between years is mathematically meaningful, however there is no "true zero", as the year 0 does not reflect absence of time. 
+(iv) Budget, revenue, and runtime. Because these are continuous numerical values where a true zero suggest zero dollars or zero minutes. 
 
 
 3. A movie studio wants to know which types of movies are best at generating profit. The measure they use for this is the profitability ratio, which is defined as $$PR=\frac{Revenue}{Budget}.$$ Perform the following steps to provide the movie studio with an analysis which corresponds to their request:
@@ -105,7 +108,7 @@ min(movies$PR, na.rm = TRUE)
 
 **Your Answer:**
 
-Write your formulated response here.
+The mean PR is Inf (infinity) and the median is 1.665002. The maximum PR is also Inf, and thrminimum PR is 0.
 
 *Step b*
 
@@ -117,7 +120,7 @@ movies[is.infinite(movies$PR), c("title", "budget", "revenue", "PR")]
 
 **Your Answer:**
 
-Write your formulated response here.
+An "Inf" value means that the formula tried to divide a positive number by zero. By looking at the data, this happens as some movies have a recorded budget of 0, but a positive revenue. It is important to note that this does not mean that there was zero production cost, it just means that the budget data ismissing and was incorrecntly entered into the dataset as a zero. 
 
 *Step c*
 
@@ -129,7 +132,7 @@ movies[is.na(movies$PR), c("title", "budget", "revenue", "PR")]
 
 **Your Answer:**
 
-Write your formulated response here.
+"NA" stands for Not Available. This outcome happens when R tries to divide zero by zero, which yields NaN (a type of NA). This correctly reflects these specific movies where both budget and revenue were recorded as a zero. 
 
 *Step d*
 
@@ -145,7 +148,9 @@ min(movies$PR, na.rm = TRUE)
 
 **Your Answer:**
 
-Write your formulated response here.
+After replacing the infinite values with NAs, the new mean PR is 1813.041, the median is 1.55807, the max is 1,000,000, and the min is 0. 
+
+The mean of 1,813 suggests that the average movie makes over 1,800 times its budget. However, by observing how far the mean is pulled away from the median, we can conculde that the mean is massively distorted by some extreme outliers and is not a fully reliable measure of a movie¨s performance. 
 
 *Step e*
 
@@ -157,7 +162,7 @@ mean(movies$PR >= 1, na.rm = TRUE)
 
 **Your Answer:**
 
-Write your formulated response here.
+A PR of 1 or higher implies that the movie reached break-even or turned a profit. In this sample, approximately 60.36% of the movies achieved this. 
 
 *Step f*
 
@@ -175,7 +180,7 @@ quantile(movies$PR,
 
 **Your Answer:**
 
-Write your formulated response here.
+The boxplot is heavily right-skewed. Essentially all is compressed into a flat line at the bottom near zero, but there is at least one extreme outlier pulling the plot scale up to 1,000,000. 
 
 # Week 2 
 1 Is your dataset movies3.tsv the full population, or is it a sample of a larger population? If the latter, how would you describe the full population? \textbf{[4 points]} 
