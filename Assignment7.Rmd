@@ -182,6 +182,13 @@ quantile(movies$PR,
 
 The boxplot is heavily right-skewed. Essentially all is compressed into a flat line at the bottom near zero, but there is at least one extreme outlier pulling the plot scale up to 1,000,000. 
 
+Q1 (25%): 0.33
+Q2 (Median): 1.56
+Q3 (75%): 3.37
+Q4 (Max): 1,000,000
+
+This data reveals that making money in the movie industry is tough. The vast majority of movies make very modest returns, which is depicted in the third quantile, but a tiny fraction of movies becomes immensely successful and thus skew the industry's numbers. 
+
 # Week 2 
 1 Is your dataset movies3.tsv the full population, or is it a sample of a larger population? If the latter, how would you describe the full population? \textbf{[4 points]} 
 
