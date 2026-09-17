@@ -317,26 +317,38 @@ b. According to IMDB, the average movie is rated with a 6.5. Using your data, te
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
+thriller_movies <- subset(movies, genre == "Thriller") 
 
+mean(thriller_movies$vote_average, na.rm = TRUE)
+sd(thriller_movies$vote_average, na.rm = TRUE)
+sum(!is.na(thriller_movies$vote_average))
 
+t.test(thriller_movies$vote_average, conf.level = 0.99)
 ```
+
 
 **Your Answer:**
 
-Write your formulated response here.
+The 99% confidence interval is [5.670042, 6.111401].
 
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
 
+t.test(thriller_movies$vote_average, 
+       mu =6.5,
+       alternative = "less",
+       conf.level = 0.95)
 
+#Because alternative hypothesis is less than 6.5, this is a left-tailed test. 
+#Significance level is 0.05. 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The P-value is 5.152e-11, indicating that the value is practically zero and does hence fall below the alpha threshold. As a result, we reject the null hypothesis. 
+
+There is sufficient evidence to conclude that the true mean of average vote of thriller movies, is below 6.5, supported by the low P-value. 
 
 2
 
@@ -349,14 +361,13 @@ d. Assume that the variance of PR for movies with a male lead actor in your data
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+table(movies$first_actor_gender, useNA = "ifany")
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+There were 182 films with a female as the lead actor, and 495 starring a male as the leading actor.  
 
 *step b*
 
