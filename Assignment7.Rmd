@@ -192,14 +192,13 @@ This data reveals that making money in the movie industry is tough. The vast maj
 # Week 2 
 1 Is your dataset movies3.tsv the full population, or is it a sample of a larger population? If the latter, how would you describe the full population? \textbf{[4 points]} 
 
-The dataset movies3.tsv is a sample of a larger population because the "Index" variable goes to 4798 whilst the number of observations is only at 707. Therefore we can conclude that there are more than 4000 data points not present in the movies3.tsv samples. The full population likely includes movies from a database such as IMDB.
-
-Write your formulated response here.
+Answer: The dataset is a sample, not the full population. The variable index runs from 2 to 4798 with gaps, but we only have 707 movies. So our movies were drawn from a list of about 4,800 movies (roughly 15% of it). Variables such as vote_average, vote_count, popularity and keywords come from The Movie Database (TMDB). The population is therefore most likely the TMDB 5000 movie database, limited to films released between 1990 and 2016 (our data contain no other years). More broadly, it is all commercially released feature films in that period, mostly English-language.
 
 
 2 Let M be the event that a movie director is male. Let R be the runtime of the movie. 
 
 a. Using your data, calculate $P(M)$. What is $P(M')$?. Calculate $P(M')$ as well. \textbf{[1 point]} 
+
 b. Assume R is normally distributed with $\mu=107$ and $\sigma=22$, calculate $P(90 \leq R \leq 120)$. \textbf{[1 point]} 
 c. Calculate $P(90 \leq R \leq 120)$ empirically using your data. How accurate were the assumptions about the distribution of R in 2b? Which of the assumptions do you consider the most suspect? Explain. \textbf{[2 points]} 
 d. Using your data, calculate $P(120 \leq R | M')$ \textbf{[2 points]} 
@@ -207,46 +206,66 @@ d. Using your data, calculate $P(120 \leq R | M')$ \textbf{[2 points]}
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
+#WRITE YOUR CODE HERE 
+table(movies$director_gender, useNA = "ifany")
+P_M <- mean(movies$director_gender == "male", na.rm = TRUE)
+P_M
+P_Mc <- 1 - P_M
+P_Mc
 
 ```
 
 **Your Answer:**
+Answer: 653 movies have a known director gender: 588 male and 65 female. The 54 unknowns are left out. P(M) = 588/653 = 0.9005. M' is the complement of M: the director is not male, which in this data means female. By the complement rule, P(M') = 1 − P(M) = 65/653 = 0.0995.
 
-Write your formulated response here.
 
 *step b*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+pnorm(120, mean = 107, sd = 22) - pnorm(90, mean = 107, sd = 22)
 ```
 
 **Your Answer:**
-
+If R ~ N(107, 22²), then P(90 ≤ R ≤ 120) = P(−0.77 ≤ Z ≤ 0.59) = Φ(0.59) − Φ(−0.77) = 0.5029. So about 50.3% of movies would run between 90 and 120 minutes.
 Write your formulated response here.
 
 *step c*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+movies$runtime[movies$runtime == 0] <- NA
+mean(movies$runtime >= 90 & movies$runtime <= 120, na.rm = TRUE)
+m <- mean(movies$runtime, na.rm = TRUE)
+s <- sd(movies$runtime, na.rm = TRUE)
+m; s
+pnorm(120, m, s) - pnorm(90, m, s)  
+hist(movies$runtime, breaks = 30, main = "Distribution of movie runtime",
+     xlab = "Runtime (minutes)", ylab = "Number of movies")
 ```
 
 **Your Answer:**
+478 of the 697 movies with a known runtime last between 90 and 120 minutes, so  P(90 ≤ R ≤ 120) = 0.686. We treated the 10 movies with runtime 0 as missing. The normal model from 2b (0.503) underestimates this by about 18 percentage points, so its assumptions were not accurate.
+-The assumed mean is roughly right: the sample mean is 104.9, against 107.
+-The assumed standard deviation is too large: the sample sd is 17.7, against 22.
+-The most suspect assumption is normality. Even with the sample's own mean and sd, a normal curve gives only 0.604.
 
-Write your formulated response here.
+The histogram shows why. Runtimes are right-skewed (mean 104.9 > median 101): only 1% of movies are shorter than 78 minutes, but a long tail runs up to 202 minutes. Most movies are packed between 90 and 120 minutes. A symmetric bell curve puts too much probability in the tails so it predicts 22% of movies under 90 minutes and 28% over 120, while the real shares are 16% and 16%.
 
 *step d*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+female_dir <- subset(movies, director_gender == "female")
+sum(!is.na(female_dir$runtime))               # female-directed movies with known runtime
+sum(female_dir$runtime >= 120, na.rm = TRUE)  # of those have a runtime of 120+ minutes
+mean(female_dir$runtime >= 120, na.rm = TRUE)
 ```
 
 **Your Answer:**
+P(R ≥ 120 | M') = P(R ≥ 120 ∩ M') / P(M'). Conditioning on M' restricts the sample space to movies with a female director. 64 of them have a known runtime, and 9 of those last 120 minutes or more. So P(R ≥ 120 | M') = 9/64 = 0.141.
 
-Write your formulated response here.
+---------
 
 3 For this question, you will again use the profitability ratio PR. Make sure that PR is defined the same way as in question 3d of week 1. For this question, you will assume that your data set is the full population.  
 
@@ -260,51 +279,88 @@ e. Using the formulas of the *Central Limit Theorem*, give the distribution of t
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+movies$PR <- movies$revenue / movies$budget
+movies$PR[is.infinite(movies$PR)] <- NA
+movies_pop <- movies[!is.na(movies$PR), ]   # population: the movies that have a PR
+nrow(movies_pop)
+mean(movies_pop$PR)
+mean(movies_pop$PR[movies_pop$title != "Nurse 3-D"])   # mean without the $10-budget typo
 ```
 
 **Your Answer:**
+Treating the data as the population (N = 555 movies with a defined PR), the population mean is μ = 1,813.04. This mean comes almost entirely from Nurse 3-D, whose budget is recorded as 10$ instead of 10 million dollars, giving PR = 1,000,000. Without that movie the mean would be 11.26.
 
-Write your formulated response here.
 
 *step b*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+set.seed(123)
+movies_sample <- movies_pop[sample(nrow(movies_pop), 25), ]
+mean(movies_sample$PR)
+movies_sample[movies_sample$PR > 100, c("title", "budget", "revenue", "PR")]
 ```
 
 **Your Answer:**
+The mean PR in our random sample of 25 movies is 40,003.65, about 22 times the population mean of 1,813.04. The reason is that Nurse 3-D is in this sample. On its own it adds 1,000,000/25 = 40,000 to the sample mean, while the other 24 movies average only 3.80. So the sample mean behaves very badly here. Any sample of 25 either contains Nurse 3-D, giving a mean of about 40,000, or it does not, giving a mean below about 200 and usually around 3. A sample mean can never land near 1,813.
 
-Write your formulated response here.
 
 *step c*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+set.seed(456)
+sample_means <- numeric(100)
+for (i in 1:100) {
+  one_sample <- movies_pop[sample(nrow(movies_pop), 25), ]
+  sample_means[i] <- mean(one_sample$PR)
+}
+print(sample_means)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+sample_means holds the means of 100 random samples of 25 movies. Most values lie between 1.25 and about 7. Five samples are around 19 and eight are around 168. Nine samples are around 40,000: samples 1, 9, 34, 44, 52, 56, 57, 59 and 79.
 
 *step d*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+summary(sample_means)
+mean(sample_means)
+sd(sample_means)
+sum(sample_means > 1000)   # samples that contain Nurse 3-D
+hist(sample_means, breaks = 50, main = "Sample means of PR (100 samples of 25 movies)",
+     xlab = "Sample mean of PR", ylab = "Number of samples")
 ```
 
 **Your Answer:**
+Mean and spread: the mean of the sample means is 3,617.34 and their standard deviation is 11,501.31.
 
-Write your formulated response here.
+Median and quartiles: the median is only 3.18 (min 1.25, Q1 2.44, Q3 6.40, max 40,023.03).
+
+Shape: extremely right-skewed and not at all normal. In the histogram, 91 samples form one bar near 0, and 9 samples form a separate bar near 40,000, with nothing in between. Those 9 are exactly the samples that contain Nurse 3-D. A mean more than 1,000 times the median confirms the extreme skew.
+
 
 *step e*
-
+```{r}
+#WRITE YOUR CODE HERE
+mu    <- mean(movies_pop$PR)
+sigma <- sd(movies_pop$PR)
+se    <- sigma / sqrt(25)
+mu; sigma; se
+pnorm(0, mean = mu, sd = se)   # CLT probability of a negative sample mean
+```
 **Your Answer:**
+By the Central Limit Theorem, X̄ ≈ N(μ, σ²/n). Here E(X̄) = μ = 1,813.04 and SD(X̄) = σ/√n = 42,447.52/√25 = 8,489.51, so X̄ ~ N(1,813.04; 8,489.51²).
 
-Write your formulated response here.
+Compared with d:
+
+Mean: the simulation gives 3,617 instead of 1,813. The mean is off because 9 of our 100 samples contained Nurse 3-D, while on average only 4.5 would. With just 100 samples, one rare movie decides the result.
+
+Standard deviation: the simulation gives 11,501 instead of 8,490.
+
+Shape: the simulated distribution is not normal at all. The CLT only works when n is large enough. The course's rule of thumb (n ≥ 30 normally)  assumes no extreme outliers. Our population is extremely skewed with one extreme value, so n = 25 is far too small. The normal approximation even gives a 41.5% chance of a negative sample mean, which is impossible because PR ≥ 0.
 
 # Week 3 
 
@@ -479,78 +535,119 @@ g. Based on your analysis in f.), estimate your model again, but remove any outl
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+model1 <- lm(PR ~ budget, data = movies)
+summary(model1)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The estimated model is PR̂ = 3,234.9 − 0.0000369 × Budget, with n = 555; the 152 movies without a PR are dropped automatically. R² = 0.0014, so budget explains only 0.14% of the variation in PR.
 
 *step b*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+coef(model1)["budget"]
+coef(model1)["budget"] * 1000000   # effect of 1 million dollars extra budget
 ```
 
 **Your Answer:**
+β̂1 = −0.0000369 (−3.689e−05). Each extra dollar of budget goes with an expected PR that is 0.0000369 lower. Per extra $1 million of budget, the expected PR is 36.9 lower. That sounds large, but the estimate is driven by the outlier Nurse 3-D and is not significant.
 
-Write your formulated response here.
 
 *step c*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+summary(model1)$coefficients["budget", ]
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+H0: β1 = 0 (PR does not depend on budget, which is Chantal's claim). H1: β1 ≠ 0. α = 0.05.
+The test statistic is t = β̂1 / SE(β̂1) = −3.689e−05 / 4.143e−05 = −0.89.
+Under H0, t follows a t-distribution with n − 2 = 553 degrees of freedom.
+p-value = 0.374 > 0.05, and |t| = 0.89 < 1.96.
+We do not reject H0. There is no significant evidence that budget is related to PR.
 
 *step d*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+# no new code needed -- the answer follows from a) to c) !
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+Chantals claim is consistent with the data. We cannot reject that PR is unrelated to budget (p = 0.374, R² = 0.0014). Bobs argument that cheaper movies are more profitable is not supported: the slope is negative but not significantly different from zero. Not rejecting H0 does not prove Chantal right; it only means the data give no evidence against her. My advice is that cutting budgets is not a statistically supported way to raise profitability. The studio should set budgets on other grounds, such as the absolute profit it needs, how much risk it can take, and the genre and audience, rather than expecting cheaper movies to earn a higher PR.
 
 *step e*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+hist(residuals(model1), breaks = 50, main = "Histogram of residuals (PR ~ budget)",
+     xlab = "Residual", ylab = "Number of movies")
+summary(residuals(model1))
+movies[names(which.max(residuals(model1))), c("title", "budget", "revenue", "PR")]
+max(rstandard(model1))   # standardized residual of that movie
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+Yes, there is reason to doubt the model. The t-test in question c assumes normally distributed residuals, and these are nowhere near normal.
+
+554 of the 555 residuals sit in the first two bars near 0, between −3,235 and 6,359.
+
+One residual of 996,765 lies far to the right. It belongs to Nurse 3-D, whose budget is recorded as $10. 
+
+Its standardized residual is 23.5, while anything above 3 already counts as an outlier.
+
+This single observation pulls the line up. The intercept is 3,235 while a typical PR is about 1.6, so the model overpredicts almost every movie and most residuals are negative (median residual −2,312).
+
+The residuals are extremely right-skewed with one huge outlier, so the p-value from c is not reliable.
 
 *step f*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+h <- hatvalues(model1)
+n <- length(h)            # 555 observations used
+k <- 1                    # one predictor
+crit <- 2 * (k + 1) / n   # textbook rule 2(k+1)/n, which is 4/n here
+crit
+sum(h > crit)
+high_lev <- names(h)[h > crit]
+range(movies[high_lev, "budget"])
+h[rownames(movies)[movies$title == "Nurse 3-D"]]
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The critical value is 2(k+1)/n = 4/555 = 0.0072, and 42 observations exceed it. The largest hat value is 0.0485, for Tangled and John Carter. All 42 are big-budget movies, from 116 million to 260 million. Leverage only measures how far a movie's budget lies from the mean budget ($38.5 million), so these blockbusters sit on the extreme part of the data  and can strongly pull the slope. They are real movies, not errors. Still, with 42 potentially influential observations, the slope depends heavily on a small group of expensive films, and that is a reason to doubt the model.
+
+The leverage check does not detect the observation that really distorts the model. Nurse 3-D has a hat value of 0.0032, below 0.0072, because its budget is not unusual on the x-axis. Its problem is its Y-value, as we saw in e).
 
 *step g*
 
 ```{r}
 #WRITE YOUR CODE HERE
+movies_g <- movies[!(rownames(movies) %in% high_lev), ]
+model1g <- lm(PR ~ budget, data = movies_g)
+summary(model1g)
 
+# 2) also remove Nurse 3-D: $10 budget is a data error, standardized residual 23.5
+model1g2 <- lm(PR ~ budget, data = subset(movies_g, title != "Nurse 3-D"))
+summary(model1g2)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+Without the 42 high-leverage movies (n = 513): PR̂ = 4,417 − 0.0000851 × Budget. For H0: β1 = 0 against H1: β1 ≠ 0 at α = 0.05, t = −1.13 and p = 0.261, so we still do not reject H0.
+Also without Nurse 3-D: leverage does not catch the real outlier, so we removed it too. Its 10 dollar budget is probably a data-entry error The model becomes PR̂ = 23.9 − 0.00000041 × Budget, which is −0.41 PR per extra 1 million. Now t = −1.31 and p = 0.191, so it is still not significant, although the coefficients are on a realistic scale.
+
+In every version, budget has no significant effect on PR. the data give no support for Bob's claim that cheaper movies are more profitable.
+
+
 
 2.
 
