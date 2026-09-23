@@ -428,27 +428,36 @@ There were 182 films with a female as the lead actor, and 495 starring a male as
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
 
+n_female <- sum(movies$first_actor_gender == "female", na.rm = TRUE)
+n_male <- sum(movies$first_actor_gender == "male", na.rm = TRUE)
+n_total <- n_female + n_male
+binom.test(x = n_female, n = n_total, p = 0.5, alternative = "two.sided")
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
-
+H0: p = 0.5 --> probability that the lead actor is male vs female is equal
+H1: p /= 0.5
+a = 0.05 significance level
+Out of 677 movies only 182 lead actors are female. The binomial test statistic of 182 successes in 677 trials yields a p-value of 2.2e-16, this value is below the significance level of 0.05 and therefore the null hypothesis is rejected. In conclusion there is enough statistical evidence that the chance of a movies lead actor being female vs male is not equal.
 
 *step c*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+movies$PR <- movies$revenue / movies$budget
+movies$PR[is.infinite(movies$PR)] <- NA
+var_male <- var(movies$PR[movies$first_actor_gender == "male"], na.rm = TRUE)
+var_female <- var(movies$PR[movies$first_actor_gender == "female"], na.rm = TRUE)
+var_male
+var_female
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The sample variance of the profitability ratio for movies with a male lead actor is 43,030.08 whilst the sample variance of the profitability for movies with a female lead actor is 6,992,928,750.
 
 *step d*
 
@@ -473,26 +482,33 @@ d. Now, create a new data frame which is a random subsample of n=100 of your ful
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
-
+sort(table(movies$genre), decreasing = TRUE)
+top3_genres <- names(sort(table(movies$genre), decreasing = TRUE)[1:3])
+movies$genre2 <- ifelse(movies$genre %in% top3_genres, movies$genre, "Other")
+movies$genre2 <- factor(movies$genre2)
+table(movies$genre2)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The most frequent genres are Drama, Comedy and Thriller with 322, 176 and 97 occurences in the data set respectively
 
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+genre_means <- aggregate(PR ~ genre2, data = movies, FUN = mean, na.rm = TRUE)
+genre_means
+plot(genre_means$genre2, genre_means$PR,
+     main = "Mean Profitability Ratio (PR) by Genre",
+     xlab = "Movie Genre",
+     ylab = "Mean Profitability Ratio",
+     pch = 19, col = "blue", cex = 1.5)
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+Thriller has by far the highest PR which is skewed by the outlier Nurse 3-D (1,000,000 PR)
 
 
 *step c*
