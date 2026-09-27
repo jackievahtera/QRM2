@@ -75,7 +75,7 @@ Based on the (dim) output, the dataset has 707 observations and 19 variables. Ea
 2. Which of the following types of variables are present in your data set? (i) nominal; (ii) ordinal; (iii); interval; (iv) ratio. If present, name one example of such a variable present in your data set.  \textbf{[4 points]} 
 
 ```{r}
-str(movies)
+#str(movies)
 ```
 
 **Your Answer:**
@@ -115,7 +115,7 @@ The mean PR is Inf (infinity) and the median is 1.665002. The maximum PR is also
 
 ```{r}
 
-movies[is.infinite(movies$PR), c("title", "budget", "revenue", "PR")]
+#movies[is.infinite(movies$PR), c("title", "budget", "revenue", "PR")]
 
 ```
 
@@ -127,7 +127,7 @@ An "Inf" value means that the formula tried to divide a positive number by zero.
 
 ```{r}
 
-movies[is.na(movies$PR), c("title", "budget", "revenue", "PR")]
+#movies[is.na(movies$PR), c("title", "budget", "revenue", "PR")]
 
 ```
 
