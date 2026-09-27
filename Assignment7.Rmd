@@ -335,11 +335,7 @@ b. According to IMDB, the average movie is rated with a 6.5. Using your data, te
 *step a*
 
 ```{r}
-thriller_movies <- subset(movies, genre == "Thriller") 
-mean(thriller_movies$vote_average, na.rm = TRUE)
-sd(thriller_movies$vote_average, na.rm = TRUE)
-sum(!is.na(thriller_movies$vote_average))
-t.test(thriller_movies$vote_average, conf.level = 0.99)
+thriller_movies <- subset(movies, genre == "Thriller") ;mean(thriller_movies$vote_average, na.rm = TRUE);sd(thriller_movies$vote_average, na.rm = TRUE);sum(!is.na(thriller_movies$vote_average));t.test(thriller_movies$vote_average, conf.level = 0.99)
 ```
 
 
@@ -350,12 +346,7 @@ The 99% confidence interval is [5.670042, 6.111401].
 *step b*
 
 ```{r}
-t.test(thriller_movies$vote_average, 
-       mu =6.5,
-       alternative = "less",
-       conf.level = 0.95)
-#Because alternative hypothesis is less than 6.5, this is a left-tailed test. 
-#Significance level is 0.05. 
+t.test(thriller_movies$vote_average, mu =6.5, alternative = "less", conf.level = 0.95)
 ```
 
 **Your Answer:**
@@ -385,10 +376,7 @@ There were 182 films with a female as the lead actor, and 495 starring a male as
 *step b*
 
 ```{r}
-num_female <- sum(movies$first_actor_gender == "female", na.rm = TRUE)
-num_male <- sum(movies$first_actor_gender == "male", na.rm = TRUE)
-num_total <- num_female + num_male
-binom.test(x = num_female, n = num_total, p = 0.5, alternative = "two.sided")
+num_female <- sum(movies$first_actor_gender == "female", na.rm = TRUE);num_male <- sum(movies$first_actor_gender == "male", na.rm = TRUE);num_total <- num_female + num_male;binom.test(x = num_female, n = num_total, p = 0.5, alternative = "two.sided")
 ```
 
 **Your Answer:**
@@ -401,12 +389,7 @@ Out of 677 movies only 182 lead actors are female. The binomial test statistic o
 *step c*
 
 ```{r}
-movies$PR <- movies$revenue / movies$budget
-movies$PR[is.infinite(movies$PR)] <- NA
-var_male <- var(movies$PR[movies$first_actor_gender == "male"], na.rm = TRUE)
-var_female <- var(movies$PR[movies$first_actor_gender == "female"], na.rm = TRUE)
-var_male
-var_female
+movies$PR <- movies$revenue / movies$budget;movies$PR[is.infinite(movies$PR)] <- NA;var_male <- var(movies$PR[movies$first_actor_gender == "male"], na.rm = TRUE);var_female <-var(movies$PR[movies$first_actor_gender == "female"], na.rm = TRUE);var_male;var_female
 ```
 
 **Your Answer:**
@@ -416,13 +399,7 @@ The sample variance of the profitability ratio for movies with a male lead actor
 *step d*
 
 ```{r}
-sigma0_sq <- var(movies$PR[movies$first_actor_gender == "male"], na.rm = TRUE)
-pr_female <- na.omit(movies$PR[movies$first_actor_gender == "female"])
-n_f <- length(pr_female)
-s_sq_f <- var(pr_female)
-test_stat <- (n_f - 1) * s_sq_f / sigma0_sq
-df <- n_f - 1
-p_val <- 2 * (1 - pchisq(test_stat, df = df))
+sigma0_sq <- var(movies$PR[movies$first_actor_gender == "male"], na.rm = TRUE);pr_female <- na.omit(movies$PR[movies$first_actor_gender == "female"]);n_f <- length(pr_female);s_sq_f <- var(pr_female);test_stat <- (n_f - 1) * s_sq_f / sigma0_sq;df <- n_f - 1;p_val <- 2 * (1 - pchisq(test_stat, df = df))
 ```
 
 **Your Answer:**
@@ -442,10 +419,7 @@ d. Now, create a new data frame which is a random subsample of n=100 of your ful
 *step a*
 
 ```{r}
-top3_genres <- names(sort(table(movies$genre), decreasing = TRUE)[1:3])
-movies$genre2 <- ifelse(movies$genre %in% top3_genres, movies$genre, "Other")
-movies$genre2 <- factor(movies$genre2)
-table(movies$genre2)
+top3_genres <- names(sort(table(movies$genre), decreasing = TRUE)[1:3]);movies$genre2 <- ifelse(movies$genre %in% top3_genres, movies$genre, "Other");movies$genre2 <- factor(movies$genre2);table(movies$genre2)
 ```
 
 **Your Answer:**
@@ -455,10 +429,8 @@ The most frequent genres are Drama, Comedy and Thriller with 322, 176 and 97 occ
 *step b*
 
 ```{r}
-genre_means <- aggregate(PR ~ genre2, data = movies, FUN = mean, na.rm = TRUE)
-genre_means
+genre_means <- aggregate(PR ~ genre2, data = movies, FUN = mean, na.rm = TRUE);genre_means
 plot(genre_means$genre2, genre_means$PR, main = "Mean Profitability Ratio (PR) by Genre", xlab = "Movie Genre", ylab = "Mean Profitability Ratio", pch = 19, col = "blue", cex = 1.5)
-
 ```
 
 **Your Answer:**
@@ -469,17 +441,8 @@ Thriller has by far the highest PR which is skewed by the outlier Nurse 3-D (1,0
 *step c*
 
 ```{r}
-genre_summary <- do.call(data.frame, aggregate(PR ~ genre2, data = movies, function(x) {
-  x <- na.omit(x)
-  n <- length(x)
-  m <- mean(x)
-  se <- sd(x) / sqrt(n)
-  ci_low <- m - qt(0.975, df = n - 1) * se
-  ci_high <- m + qt(0.975, df = n - 1) * se
-  c(mean = m, ci_low = ci_low, ci_high = ci_high)
-}))
-colnames(genre_summary) <- c("genre2", "mean", "ci_low", "ci_high")
-genre_summary
+genre_summary <- do.call(data.frame, aggregate(PR ~ genre2, data = movies, function(x) {x <- na.omit(x);n <- length(x);m <- mean(x);se <- sd(x) / sqrt(n);ci_low <- m - qt(0.975, df = n - 1) * se;ci_high <- m + qt(0.975, df = n - 1) * se;c(mean = m, ci_low = ci_low, ci_high = ci_high)
+}));colnames(genre_summary) <- c("genre2", "mean", "ci_low", "ci_high");genre_summary
 y_lims <- range(c(genre_summary$ci_low, genre_summary$ci_high))
 plot(1:nrow(genre_summary), genre_summary$mean, xaxt = "n", ylim = y_lims, pch = 19, col = "blue", cex = 1.3, main = "Mean PR with 95% Confidence Intervals by Genre", xlab = "Movie Genre", ylab = "Profitability Ratio (PR)")
 axis(1, at = 1:nrow(genre_summary), labels = genre_summary$genre2)
