@@ -316,7 +316,6 @@ for (i in 1:100) {
   one_sample <- movies_pop[sample(nrow(movies_pop), 25), ]
   sample_means[i] <- mean(one_sample$PR)
 }
-print(sample_means)
 ```
 
 **Your Answer:**
