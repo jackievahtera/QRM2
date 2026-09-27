@@ -374,11 +374,9 @@ b. According to IMDB, the average movie is rated with a 6.5. Using your data, te
 
 ```{r}
 thriller_movies <- subset(movies, genre == "Thriller") 
-
 mean(thriller_movies$vote_average, na.rm = TRUE)
 sd(thriller_movies$vote_average, na.rm = TRUE)
 sum(!is.na(thriller_movies$vote_average))
-
 t.test(thriller_movies$vote_average, conf.level = 0.99)
 ```
 
@@ -390,12 +388,10 @@ The 99% confidence interval is [5.670042, 6.111401].
 *step b*
 
 ```{r}
-
 t.test(thriller_movies$vote_average, 
        mu =6.5,
        alternative = "less",
        conf.level = 0.95)
-
 #Because alternative hypothesis is less than 6.5, this is a left-tailed test. 
 #Significance level is 0.05. 
 ```
@@ -418,7 +414,6 @@ d. Assume that the variance of PR for movies with a male lead actor in your data
 
 ```{r}
 table(movies$first_actor_gender, useNA = "ifany")
-
 ```
 
 **Your Answer:**
@@ -428,12 +423,10 @@ There were 182 films with a female as the lead actor, and 495 starring a male as
 *step b*
 
 ```{r}
-
 num_female <- sum(movies$first_actor_gender == "female", na.rm = TRUE)
 num_male <- sum(movies$first_actor_gender == "male", na.rm = TRUE)
 num_total <- num_female + num_male
 binom.test(x = num_female, n = num_total, p = 0.5, alternative = "two.sided")
-
 ```
 
 **Your Answer:**
@@ -452,7 +445,6 @@ var_male <- var(movies$PR[movies$first_actor_gender == "male"], na.rm = TRUE)
 var_female <- var(movies$PR[movies$first_actor_gender == "female"], na.rm = TRUE)
 var_male
 var_female
-
 ```
 
 **Your Answer:**
@@ -503,11 +495,7 @@ The most frequent genres are Drama, Comedy and Thriller with 322, 176 and 97 occ
 ```{r}
 genre_means <- aggregate(PR ~ genre2, data = movies, FUN = mean, na.rm = TRUE)
 genre_means
-plot(genre_means$genre2, genre_means$PR,
-     main = "Mean Profitability Ratio (PR) by Genre",
-     xlab = "Movie Genre",
-     ylab = "Mean Profitability Ratio",
-     pch = 19, col = "blue", cex = 1.5)
+plot(genre_means$genre2, genre_means$PR, main = "Mean Profitability Ratio (PR) by Genre", xlab = "Movie Genre", ylab = "Mean Profitability Ratio", pch = 19, col = "blue", cex = 1.5)
 
 ```
 
@@ -530,17 +518,9 @@ genre_summary <- do.call(data.frame, aggregate(PR ~ genre2, data = movies, funct
 }))
 colnames(genre_summary) <- c("genre2", "mean", "ci_low", "ci_high")
 genre_summary
-
 y_lims <- range(c(genre_summary$ci_low, genre_summary$ci_high))
-plot(1:nrow(genre_summary), genre_summary$mean,
-     xaxt = "n",
-     ylim = y_lims,
-     pch = 19, col = "blue", cex = 1.3,
-     main = "Mean PR with 95% Confidence Intervals by Genre",
-     xlab = "Movie Genre",
-     ylab = "Profitability Ratio (PR)")
+plot(1:nrow(genre_summary), genre_summary$mean, xaxt = "n", ylim = y_lims, pch = 19, col = "blue", cex = 1.3, main = "Mean PR with 95% Confidence Intervals by Genre", xlab = "Movie Genre", ylab = "Profitability Ratio (PR)")
 axis(1, at = 1:nrow(genre_summary), labels = genre_summary$genre2)
-
 arrows(x0 = 1:nrow(genre_summary), y0 = genre_summary$ci_low,
        x1 = 1:nrow(genre_summary), y1 = genre_summary$ci_high,
        angle = 90, code = 3, length = 0.08, col = "red", lwd = 2)
@@ -555,24 +535,15 @@ The categories Other and Thriller have significant standard errors due to the pr
 ```{r}
 set.seed(123)
 movies_sub <- movies[sample(nrow(movies), 100), ]
-
 mean_sub <- tapply(movies_sub$PR, movies_sub$genre2, mean, na.rm = TRUE)
 sds_sub  <- tapply(movies_sub$PR, movies_sub$genre2, sd, na.rm = TRUE)
 ns_sub   <- tapply(movies_sub$PR, movies_sub$genre2, function(x) sum(!is.na(x)))
 se_sub   <- sds_sub / sqrt(ns_sub)
 ci_low_sub <- mean_sub - 1.96 * se_sub
 ci_high_sub <- mean_sub + 1.96 * se_sub
-plot(1:4, mean_sub, 
-     xaxt = "n", 
-     pch = 19, 
-     ylim = range(c(ci_low_sub, ci_high_sub), na.rm = TRUE),
-     main = "Mean PR with 95% CI (Subsample of n = 100)",
-     xlab = "Genre", 
-     ylab = "Profitability Ratio (PR)")
+plot(1:4, mean_sub, xaxt = "n", pch = 19, ylim = range(c(ci_low_sub, ci_high_sub), na.rm = TRUE), main = "Mean PR with 95% CI (Subsample of n = 100)", xlab = "Genre", ylab = "Profitability Ratio (PR)")
 axis(1, at = 1:4, labels = names(mean_sub))
-
 arrows(1:4, ci_low_sub, 1:4, ci_high_sub, angle = 90, code = 3, length = 0.05, col = "red")
-
 ```
 
 **Your Answer:**
