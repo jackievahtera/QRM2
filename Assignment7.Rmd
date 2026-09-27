@@ -467,11 +467,8 @@ pr_female <- na.omit(movies$PR[movies$first_actor_gender == "female"])
 n_f <- length(pr_female)
 s_sq_f <- var(pr_female)
 test_stat <- (n_f - 1) * s_sq_f / sigma0_sq
-test_stat
 df <- n_f - 1
-df
 p_val <- 2 * (1 - pchisq(test_stat, df = df))
-p_val
 ```
 
 **Your Answer:**
