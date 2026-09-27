@@ -208,12 +208,7 @@ d. Using your data, calculate $P(120 \leq R | M')$ \textbf{[2 points]}
 
 ```{r}
 #WRITE YOUR CODE HERE 
-table(movies$director_gender, useNA = "ifany")
-P_M <- mean(movies$director_gender == "male", na.rm = TRUE)
-P_M
-P_Mc <- 1 - P_M
-P_Mc
-
+table(movies$director_gender, useNA = "ifany");P_M <- mean(movies$director_gender == "male", na.rm = TRUE);P_Mc <- 1 - P_M
 ```
 
 **Your Answer:**
@@ -223,7 +218,6 @@ Answer: 653 movies have a known director gender: 588 male and 65 female. The 54 
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
 pnorm(120, mean = 107, sd = 22) - pnorm(90, mean = 107, sd = 22)
 ```
 
@@ -234,15 +228,8 @@ Write your formulated response here.
 *step c*
 
 ```{r}
-#WRITE YOUR CODE HERE
-movies$runtime[movies$runtime == 0] <- NA
-mean(movies$runtime >= 90 & movies$runtime <= 120, na.rm = TRUE)
-m <- mean(movies$runtime, na.rm = TRUE)
-s <- sd(movies$runtime, na.rm = TRUE)
-m; s
-pnorm(120, m, s) - pnorm(90, m, s)  
-hist(movies$runtime, breaks = 30, main = "Distribution of movie runtime",
-     xlab = "Runtime (minutes)", ylab = "Number of movies")
+movies$runtime[movies$runtime == 0] <- NA;mean(movies$runtime >= 90 & movies$runtime <= 120, na.rm = TRUE);m <- mean(movies$runtime, na.rm = TRUE);s <- sd(movies$runtime, na.rm = TRUE);m; s;pnorm(120, m, s) - pnorm(90, m, s);hist(movies$runtime, breaks = 30, main = "Distribution of movie runtime",
+    xlab = "Runtime (minutes)", ylab = "Number of movies")
 ```
 
 **Your Answer:**
@@ -256,11 +243,7 @@ The histogram shows why. Runtimes are right-skewed (mean 104.9 > median 101): on
 *step d*
 
 ```{r}
-#WRITE YOUR CODE HERE
-female_dir <- subset(movies, director_gender == "female")
-sum(!is.na(female_dir$runtime))               # female-directed movies with known runtime
-sum(female_dir$runtime >= 120, na.rm = TRUE)  # of those have a runtime of 120+ minutes
-mean(female_dir$runtime >= 120, na.rm = TRUE)
+female_dir <- subset(movies, director_gender == "female");sum(!is.na(female_dir$runtime))           ;sum(female_dir$runtime >= 120, na.rm = TRUE)  ;mean(female_dir$runtime >= 120, na.rm = TRUE)
 ```
 
 **Your Answer:**
@@ -279,13 +262,7 @@ e. Using the formulas of the *Central Limit Theorem*, give the distribution of t
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
-movies$PR <- movies$revenue / movies$budget
-movies$PR[is.infinite(movies$PR)] <- NA
-movies_pop <- movies[!is.na(movies$PR), ]   # population: the movies that have a PR
-nrow(movies_pop)
-mean(movies_pop$PR)
-mean(movies_pop$PR[movies_pop$title != "Nurse 3-D"])   # mean without the $10-budget typo
+movies$PR <- movies$revenue / movies$budget;movies$PR[is.infinite(movies$PR)] <- NA;movies_pop <- movies[!is.na(movies$PR), ] ;nrow(movies_pop);mean(movies_pop$PR);mean(movies_pop$PR[movies_pop$title != "Nurse 3-D"])  
 ```
 
 **Your Answer:**
@@ -295,10 +272,7 @@ Treating the data as the population (N = 555 movies with a defined PR), the popu
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
-set.seed(123)
-movies_sample <- movies_pop[sample(nrow(movies_pop), 25), ]
-mean(movies_sample$PR)
+set.seed(123);movies_sample <- movies_pop[sample(nrow(movies_pop), 25), ];mean(movies_sample$PR)
 movies_sample[movies_sample$PR > 100, c("title", "budget", "revenue", "PR")]
 ```
 
@@ -309,13 +283,10 @@ The mean PR in our random sample of 25 movies is 40,003.65, about 22 times the p
 *step c*
 
 ```{r}
-#WRITE YOUR CODE HERE
-set.seed(456)
-sample_means <- numeric(100)
-for (i in 1:100) {
-  one_sample <- movies_pop[sample(nrow(movies_pop), 25), ]
-  sample_means[i] <- mean(one_sample$PR)
-}
+set.seed(456);sample_means <- numeric(100)
+for (i in 1:100) {one_sample <- movies_pop[sample(nrow(movies_pop), 25), ]
+  sample_means[i] <- mean(one_sample$PR)}
+print(sample_means)
 ```
 
 **Your Answer:**
@@ -325,12 +296,7 @@ sample_means holds the means of 100 random samples of 25 movies. Most values lie
 *step d*
 
 ```{r}
-#WRITE YOUR CODE HERE
-summary(sample_means)
-mean(sample_means)
-sd(sample_means)
-sum(sample_means > 1000)   # samples that contain Nurse 3-D
-hist(sample_means, breaks = 50, main = "Sample means of PR (100 samples of 25 movies)",
+summary(sample_means);mean(sample_means);sd(sample_means);sum(sample_means > 1000)   ;hist(sample_means, breaks = 50, main = "Sample means of PR (100 samples of 25 movies)",
      xlab = "Sample mean of PR", ylab = "Number of samples")
 ```
 
@@ -344,12 +310,8 @@ Shape: extremely right-skewed and not at all normal. In the histogram, 91 sample
 
 *step e*
 ```{r}
-#WRITE YOUR CODE HERE
-mu    <- mean(movies_pop$PR)
-sigma <- sd(movies_pop$PR)
-se    <- sigma / sqrt(25)
-mu; sigma; se
-pnorm(0, mean = mu, sd = se)   # CLT probability of a negative sample mean
+mu    <- mean(movies_pop$PR);sigma <- sd(movies_pop$PR);se    <- sigma / sqrt(25)
+mu; sigma; se;pnorm(0, mean = mu, sd = se)   # CLT probability of a negative sample mean
 ```
 **Your Answer:**
 By the Central Limit Theorem, X̄ ≈ N(μ, σ²/n). Here E(X̄) = μ = 1,813.04 and SD(X̄) = σ/√n = 42,447.52/√25 = 8,489.51, so X̄ ~ N(1,813.04; 8,489.51²).
