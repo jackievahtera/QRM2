@@ -551,7 +551,7 @@ arrows(x0 = 1:nrow(genre_summary), y0 = genre_summary$ci_low,
 
 **Your Answer:**
 
-Write your formulated response here.
+The categories Other and Thriller have significant standard errors due to the previously mentioned outliers such as Nurse 3-D. This movie on its own is largely responsible for the wide confidence interval for the Thriller category.
 
 *step d*
 
