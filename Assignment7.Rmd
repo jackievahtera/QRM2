@@ -429,10 +429,10 @@ There were 182 films with a female as the lead actor, and 495 starring a male as
 
 ```{r}
 
-n_female <- sum(movies$first_actor_gender == "female", na.rm = TRUE)
-n_male <- sum(movies$first_actor_gender == "male", na.rm = TRUE)
-n_total <- n_female + n_male
-binom.test(x = n_female, n = n_total, p = 0.5, alternative = "two.sided")
+num_female <- sum(movies$first_actor_gender == "female", na.rm = TRUE)
+num_male <- sum(movies$first_actor_gender == "male", na.rm = TRUE)
+num_total <- num_female + num_male
+binom.test(x = num_female, n = num_total, p = 0.5, alternative = "two.sided")
 
 ```
 
@@ -462,9 +462,16 @@ The sample variance of the profitability ratio for movies with a male lead actor
 *step d*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
-
+sigma0_sq <- var(movies$PR[movies$first_actor_gender == "male"], na.rm = TRUE)
+pr_female <- na.omit(movies$PR[movies$first_actor_gender == "female"])
+n_f <- length(pr_female)
+s_sq_f <- var(pr_female)
+test_stat <- (n_f - 1) * s_sq_f / sigma0_sq
+test_stat
+df <- n_f - 1
+df
+p_val <- 2 * (1 - pchisq(test_stat, df = df))
+p_val
 ```
 
 **Your Answer:**
@@ -482,7 +489,6 @@ d. Now, create a new data frame which is a random subsample of n=100 of your ful
 *step a*
 
 ```{r}
-sort(table(movies$genre), decreasing = TRUE)
 top3_genres <- names(sort(table(movies$genre), decreasing = TRUE)[1:3])
 movies$genre2 <- ifelse(movies$genre %in% top3_genres, movies$genre, "Other")
 movies$genre2 <- factor(movies$genre2)
@@ -548,8 +554,25 @@ Write your formulated response here.
 *step d*
 
 ```{r}
-#WRITE YOUR CODE HERE
+set.seed(123)
+movies_sub <- movies[sample(nrow(movies), 100), ]
 
+mean_sub <- tapply(movies_sub$PR, movies_sub$genre2, mean, na.rm = TRUE)
+sds_sub  <- tapply(movies_sub$PR, movies_sub$genre2, sd, na.rm = TRUE)
+ns_sub   <- tapply(movies_sub$PR, movies_sub$genre2, function(x) sum(!is.na(x)))
+se_sub   <- sds_sub / sqrt(ns_sub)
+ci_low_sub <- mean_sub - 1.96 * se_sub
+ci_high_sub <- mean_sub + 1.96 * se_sub
+plot(1:4, mean_sub, 
+     xaxt = "n", 
+     pch = 19, 
+     ylim = range(c(ci_low_sub, ci_high_sub), na.rm = TRUE),
+     main = "Mean PR with 95% CI (Subsample of n = 100)",
+     xlab = "Genre", 
+     ylab = "Profitability Ratio (PR)")
+axis(1, at = 1:4, labels = names(mean_sub))
+
+arrows(1:4, ci_low_sub, 1:4, ci_high_sub, angle = 90, code = 3, length = 0.05, col = "red")
 
 ```
 
