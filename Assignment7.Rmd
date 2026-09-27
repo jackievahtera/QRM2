@@ -476,7 +476,9 @@ p_val
 
 **Your Answer:**
 
-Write your formulated response here.
+We set up a two-sided hypothesis test where the null hypothesis is that the variance of the profitability ratio for female-lead equals the variance for male-lead movies, and the alternative hypothesis is that they are not equal. We use a significance level a = 0.05. 
+
+By using our data and the male variance as the population value, the test statistic follows a chi-squared distribution with n-1 degrees of freedom. The test then yields a p-value of basically zero, which is way below 0.05. Hence, we reject the null hypothesis. There is thus clear evidence that the variance for female-lead movies is different than that of male-lead movies. It is much larger due to the extreme values in that subset. 
 
 3
 
