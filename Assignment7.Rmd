@@ -6,6 +6,7 @@ date:  "27th of September"
 output:
   pdf_document:
     number_sections: true
+    latex_engine: xelatex
   html_document:
     df_print: paged
 
