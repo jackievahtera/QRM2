@@ -580,7 +580,9 @@ arrows(1:4, ci_low_sub, 1:4, ci_high_sub, angle = 90, code = 3, length = 0.05, c
 
 **Your Answer:**
 
-Write your formulated response here.
+Compared to the plot in part c, the confidence intervals in this n=100 sub-sample are visibly more wide and spread out. 
+
+This makes sense due to the standard error being calculated by dividing the standard deviation by the square root of n. By reducing our sample size down to 100, we decrease the denominator, which then causes the standard errors to increase and makes our 95% confidence intervals wider. In addition, the point estimates does jump around a lot more because a smaller random sample is more sensitive to whichever specific movies get picked. 
 
 # Week 4 
 
