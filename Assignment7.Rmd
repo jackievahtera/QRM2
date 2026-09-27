@@ -1,8 +1,8 @@
 ---
 title: "QRM II Graded Assignment (7)"
 subtitle: "Period 1, 2026"
-author: "Fill in your group number and names here"
-date:  "`r format(Sys.Date(), '%d-%m-%Y')`"
+author: "Peter Ac, Jakob Vahtera Persson, Shabir Adel, David Ruivo Craveiro "
+date:  "27th of September"
 output:
   pdf_document:
     number_sections: true
