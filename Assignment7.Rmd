@@ -514,9 +514,31 @@ Thriller has by far the highest PR which is skewed by the outlier Nurse 3-D (1,0
 *step c*
 
 ```{r}
-#WRITE YOUR CODE HERE
+genre_summary <- do.call(data.frame, aggregate(PR ~ genre2, data = movies, function(x) {
+  x <- na.omit(x)
+  n <- length(x)
+  m <- mean(x)
+  se <- sd(x) / sqrt(n)
+  ci_low <- m - qt(0.975, df = n - 1) * se
+  ci_high <- m + qt(0.975, df = n - 1) * se
+  c(mean = m, ci_low = ci_low, ci_high = ci_high)
+}))
+colnames(genre_summary) <- c("genre2", "mean", "ci_low", "ci_high")
+genre_summary
 
+y_lims <- range(c(genre_summary$ci_low, genre_summary$ci_high))
+plot(1:nrow(genre_summary), genre_summary$mean,
+     xaxt = "n",
+     ylim = y_lims,
+     pch = 19, col = "blue", cex = 1.3,
+     main = "Mean PR with 95% Confidence Intervals by Genre",
+     xlab = "Movie Genre",
+     ylab = "Profitability Ratio (PR)")
+axis(1, at = 1:nrow(genre_summary), labels = genre_summary$genre2)
 
+arrows(x0 = 1:nrow(genre_summary), y0 = genre_summary$ci_low,
+       x1 = 1:nrow(genre_summary), y1 = genre_summary$ci_high,
+       angle = 90, code = 3, length = 0.08, col = "red", lwd = 2)
 ```
 
 **Your Answer:**
