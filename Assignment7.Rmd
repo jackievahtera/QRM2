@@ -615,24 +615,39 @@ b. Using the insights from the scatterplot, your linear model, and your data, fi
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
+model <- lm(vote_average ~ runtime, data = movies)
 
+plot(movies$runtime, movies$vote_average,
+     main = "Vote Average vs. Movie Runtime", 
+     xlab = "Runtime (minutes)",
+     ylab = "Vote Average",
+     pch = 19, col = "steelblue")
+
+abline(model, col = "red", lwd = 2)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The scatterplot depicts a positive association between a movie's runtime and its vote average. However, there is no evidence for causalisation. 
 
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
+valid_rows <- which(!is.na(movies$vote_average) & !is.na(movies$runtime))
+model <- lm(vote_average ~ runtime, data = movies[valid_rows, ])
+movies$predicted <- NA
+movies$predicted[valid_rows] <- predict(model)
 
+movies$residuals <- NA
+movies$residuals[valid_rows] <- residuals(model)
+
+best_movie_idx <- which.max(movies$residuals)
+movies[best_movie_idx, c("title", "vote_average","predicted","residuals", "runtime")]
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The one movie that performed exceptionally given its runtime, is The Lion King. The predicted vote average for this film was 5.692, but its actual vote average amounted to 8.0. In addition, the residual of The Lion King is 2.307. 
 
 # Week 5
   
