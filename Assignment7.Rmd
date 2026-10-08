@@ -774,8 +774,7 @@ par(mfrow = c(1, 1))
 ```
 
 **Your Answer:**
-
-Write your formulated response here.
+There is indeed strong evidence of heteroskedasticity, especially in the residuals against budget plot. The movies with low budget levels have residuals clustered around zero and when the budget increases the spread of the residuals increases indicating that the error variance is not constant.
 
 *step e*
 
@@ -787,4 +786,5 @@ model_lang <- lm(PR ~ is_english + log(budget) + genre2 + release_year, data = m
 summary(model_lang)
 ```
 
+**Your Answer:**
 
