@@ -756,8 +756,23 @@ Write your formulated response here.
 *step d*
 
 ```{r}
-#WRITE YOUR CODE HERE
+resids <- residuals(model_rev)
 
+par(mfrow = c(1, 2))
+plot(model_rev$model$budget, resids,
+     main = "Residuals vs Budget",
+     xlab = "Budget ($)",
+     ylab = "Residuals",
+     pch = 20, col = "gray40")
+abline(h = 0, col = "red", lty = 2)
+
+plot(model_rev$model$runtime, resids,
+     main = "Residuals vs Runtime",
+     xlab = "Runtime (minutes)",
+     ylab = "Residuals",
+     pch = 20, col = "gray40")
+abline(h = 0, col = "red", lty = 2)
+par(mfrow = c(1, 1))
 ```
 
 **Your Answer:**
@@ -767,8 +782,11 @@ Write your formulated response here.
 *step e*
 
 ```{r}
-#WRITE YOUR CODE HERE
+movies$is_english <- ifelse(movies$original_language == "en", 1, 0)
+table(movies$original_language == "en", useNA = "ifany")
 
+model_lang <- lm(PR ~ is_english + log(budget) + genre2 + release_year, data = movies)
+summary(model_lang)
 ```
 
 
