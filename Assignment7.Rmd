@@ -665,7 +665,49 @@ e. The movie is set in Germany. The director wants to make the movie with only g
 
 ```{r}
 #WRITE YOUR CODE HERE
+yearly <- do.call(
+  rbind,
+  lapply(split(movies$PR, movies$release_year), function(x) {
 
+    x <- x[!is.na(x)]
+
+    n <- length(x)
+    average <- mean(x)
+    standard_error <- sd(x) / sqrt(n)
+
+    margin <- qt(0.975, df = n - 1) * standard_error
+
+    c(
+      n = n,
+      mean = average,
+      lower = average - margin,
+      upper = average + margin
+    )
+  })
+)
+
+round(yearly, 2)
+years <- as.numeric(rownames(yearly))
+
+plot(
+  years,
+  yearly[, "mean"],
+  pch = 19,
+  ylim = range(yearly[, c("lower", "upper")]),
+  main = "Mean Profitability Ratio by Release Year",
+  xlab = "Release year",
+  ylab = "Mean PR (Revenue / Budget)"
+)
+
+arrows(
+  x0 = years,
+  y0 = yearly[, "lower"],
+  x1 = years,
+  y1 = yearly[, "upper"],
+  angle = 90,
+  code = 3,
+  length = 0.03
+)
 ```
 
 **Your Answer:**
