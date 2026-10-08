@@ -750,9 +750,7 @@ predict(model_rev, newdata = new_movie, interval = "prediction", level = 0.95)
 ```
 
 **Your Answer:**
-
-Write your formulated response here.
-
+We are estimating an OLS model with revenue as the dependent variable and budget, runtime, release year and genre2 as explanatory variables. With the budget of 40 million dollars and a runtime of 160 minutes, the predicted revenue is 162.38 million dollars. The 95% confidence interval is [-46.28 million dollars, 371.03 million dollars]. This relatively large range reflects considerable uncertainty of the movies profitability. 
 *step d*
 
 ```{r}
