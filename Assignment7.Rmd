@@ -712,24 +712,41 @@ arrows(
 
 **Your Answer:**
 
-Write your formulated response here.
+Looking at the plot of mean profitability ratios across release years, we don't identify a clear, steady upward or downward time trend. Most years cluster at lower mean PR levels, with tight confidence intervals. However, we have two mayor outliers; The Blairwitch Project (1999) and Nurse 3-D (2013).
 
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+movies$log_budget <- log(movies$budget)
+model_b <- lm(PR ~ log_budget + genre2 + release_year, data = movies)
+summary(model_b)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+We estimated an OLS model with PR as the dependent variable, log_budget and genre2 as dummies, and finally release_year as independent variables.
+
+Intercept: Represents the baseline expected PR when the log budgdet is zero, release year is zero, and genre being the reference category.
+
+Log_budget: This coefficient captures percentage change that budget adjustments have on PR, holding other factors constant. Higher budgets typically show a flattened or negative relationship with a relative profitability. 
+
+Genre2 coefficients: While holding release_year and budget constant, Drama, Other, and Thriller are expected to have a higher or lower PR than comedy movies, which is the baseline. 
+
+Release_year: Indicates the average annual change in PR over time, while keeping budget and genre constant. However, the data is skewed due to Nurse 3-D being a part of the sample data. 
 
 *step c*
 
 ```{r}
-#WRITE YOUR CODE HERE
+model_rev <- lm(revenue ~ budget + runtime + release_year + genre2, data = movies)
 
+new_movie <- data.frame(
+  budget = 40000000,
+  runtime = 160,
+  release_year = 2026,
+  genre2 = "Comedy"
+)
+
+predict(model_rev, newdata = new_movie, interval = "prediction", level = 0.95)
 ```
 
 **Your Answer:**
