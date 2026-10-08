@@ -787,4 +787,4 @@ summary(model_lang)
 ```
 
 **Your Answer:**
-
+At a significance level of 5% we test H0: βEnglish = 0 against H1: βEnglish ≠ 0. From our OLS model we can see that English language films have an estimated PR 6,513.88 units higher than non English language films. However, the t-statistic is 0.8743 with 548 df, and the p-value is 0.3824. Therefore, we do not reject the null hypothesis. The model provides no statistically significant evidence of an English versus non-English difference in PR. This does not prove that language has no effect. Moreover, the model groups all non-English languages together and therefore does not estimate a German-specific effect. Additionally extreme PR observations also limit the reliability of the results. We would not recommend insisting on English solely on this evidence. Comparable German-language comedy data would be needed for a stronger recommendation.
