@@ -698,16 +698,6 @@ plot(
   xlab = "Release year",
   ylab = "Mean PR (Revenue / Budget)"
 )
-
-arrows(
-  x0 = years,
-  y0 = yearly[, "lower"],
-  x1 = years,
-  y1 = yearly[, "upper"],
-  angle = 90,
-  code = 3,
-  length = 0.03
-)
 ```
 
 **Your Answer:**
