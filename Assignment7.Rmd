@@ -499,7 +499,7 @@ summary(model1)
 
 **Your Answer:**
 
-The estimated model is PR̂ = 3,234.9 − 0.0000369 × Budget, with n = 555; the 152 movies without a PR are dropped automatically. R² = 0.0014, so budget explains only 0.14% of the variation in PR.
+The estimated model is $\widehat{PR}$ = 3,234.9 - 0.0000369 x Budget, with n = 555; the 152 movies without a PR are dropped automatically. $R^2$ = 0.0014, so budget explains only 0.14% of the variation in PR.
 
 *step b*
 
@@ -510,7 +510,7 @@ coef(model1)["budget"] * 1000000   # effect of 1 million dollars extra budget
 ```
 
 **Your Answer:**
-β̂1 = −0.0000369 (−3.689e−05). Each extra dollar of budget goes with an expected PR that is 0.0000369 lower. Per extra $1 million of budget, the expected PR is 36.9 lower. That sounds large, but the estimate is driven by the outlier Nurse 3-D and is not significant.
+$\hat{\beta}_1$ = -0.0000369 (-3.689e-05). Each extra dollar of budget goes with an expected PR that is 0.0000369 lower. Per extra 1 million dollars of budget, the expected PR is 36.9 lower. That sounds large, but the estimate is driven by the outlier Nurse 3-D and is not significant.
 
 
 *step c*
@@ -522,9 +522,9 @@ summary(model1)$coefficients["budget", ]
 
 **Your Answer:**
 
-H0: β1 = 0 (PR does not depend on budget, which is Chantal's claim). H1: β1 ≠ 0. α = 0.05.
-The test statistic is t = β̂1 / SE(β̂1) = −3.689e−05 / 4.143e−05 = −0.89.
-Under H0, t follows a t-distribution with n − 2 = 553 degrees of freedom.
+H0: $\beta_1 = 0$ (PR does not depend on budget, which is Chantal's claim). H1: $\beta_1 \neq 0$. $\alpha$ = 0.05.
+The test statistic is t = $\hat{\beta}_1$ / SE($\hat{\beta}_1$) = -3.689e-05 / 4.143e-05 = -0.89.
+Under H0, t follows a t-distribution with n - 2 = 553 degrees of freedom.
 p-value = 0.374 > 0.05, and |t| = 0.89 < 1.96.
 We do not reject H0. There is no significant evidence that budget is related to PR.
 
@@ -537,7 +537,7 @@ We do not reject H0. There is no significant evidence that budget is related to 
 
 **Your Answer:**
 
-Chantals claim is consistent with the data. We cannot reject that PR is unrelated to budget (p = 0.374, R² = 0.0014). Bobs argument that cheaper movies are more profitable is not supported: the slope is negative but not significantly different from zero. Not rejecting H0 does not prove Chantal right; it only means the data give no evidence against her. My advice is that cutting budgets is not a statistically supported way to raise profitability. The studio should set budgets on other grounds, such as the absolute profit it needs, how much risk it can take, and the genre and audience, rather than expecting cheaper movies to earn a higher PR.
+Chantal's claim is consistent with the data. We cannot reject that PR is unrelated to budget (p = 0.374, $R^2$ = 0.0014). Bob's argument that cheaper movies are more profitable is not supported: the slope is negative but not significantly different from zero. Not rejecting H0 does not prove Chantal right; it only means the data give no evidence against her. My advice is that cutting budgets is not a statistically supported way to raise profitability. The studio should set budgets on other grounds, such as the absolute profit it needs, how much risk it can take, and the genre and audience, rather than expecting cheaper movies to earn a higher PR.
 
 *step e*
 
@@ -600,10 +600,11 @@ summary(model1g2)
 
 **Your Answer:**
 
-Without the 42 high-leverage movies (n = 513): PR̂ = 4,417 − 0.0000851 × Budget. For H0: β1 = 0 against H1: β1 ≠ 0 at α = 0.05, t = −1.13 and p = 0.261, so we still do not reject H0.
-Also without Nurse 3-D: leverage does not catch the real outlier, so we removed it too. Its 10 dollar budget is probably a data-entry error The model becomes PR̂ = 23.9 − 0.00000041 × Budget, which is −0.41 PR per extra 1 million. Now t = −1.31 and p = 0.191, so it is still not significant, although the coefficients are on a realistic scale.
+Without the 42 high-leverage movies (n = 513): $\widehat{PR}$ = 4,417 - 0.0000851 x Budget. For H0: $\beta_1 = 0$ against H1: $\beta_1 \neq 0$ at $\alpha$ = 0.05, t = -1.13 and p = 0.261, so we still do not reject H0.
 
-In every version, budget has no significant effect on PR. the data give no support for Bob's claim that cheaper movies are more profitable.
+Also without Nurse 3-D: leverage does not catch the real outlier, so we removed it too. Its 10 dollar budget is probably a data-entry error. The model becomes $\widehat{PR}$ = 23.9 - 0.00000041 x Budget, which is -0.41 PR per extra 1 million dollars. Now t = -1.31 and p = 0.191, so it is still not significant, although the coefficients are on a realistic scale.
+
+In every version, budget has no significant effect on PR. The data give no support for Bob's claim that cheaper movies are more profitable.
 
 
 
@@ -777,4 +778,4 @@ summary(model_lang)
 ```
 
 **Your Answer:**
-At a significance level of 5% we test H0: βEnglish = 0 against H1: βEnglish ≠ 0. From our OLS model we can see that English language films have an estimated PR 6,513.88 units higher than non English language films. However, the t-statistic is 0.8743 with 548 df, and the p-value is 0.3824. Therefore, we do not reject the null hypothesis. The model provides no statistically significant evidence of an English versus non-English difference in PR. This does not prove that language has no effect. Moreover, the model groups all non-English languages together and therefore does not estimate a German-specific effect. Additionally extreme PR observations also limit the reliability of the results. We would not recommend insisting on English solely on this evidence. Comparable German-language comedy data would be needed for a stronger recommendation.
+At a significance level of 5% we test H0: $\beta_{English} = 0$ against H1: $\beta_{English} \neq 0$. From our OLS model we can see that English language films have an estimated PR 6,513.88 units higher than non English language films. However, the t-statistic is 0.8743 with 548 df, and the p-value is 0.3824. Therefore, we do not reject the null hypothesis. The model provides no statistically significant evidence of an English versus non-English difference in PR. This does not prove that language has no effect. Moreover, the model groups all non-English languages together and therefore does not estimate a German-specific effect. Additionally extreme PR observations also limit the reliability of the results. We would not recommend insisting on English solely on this evidence. Comparable German-language comedy data would be needed for a stronger recommendation.
